@@ -1,0 +1,33 @@
+server:
+  port: 8080
+  error:
+    include-stacktrace: NEVER
+
+kakao:
+  search:
+    url:
+    rest-api-key: 5282b407e6d87d4de26ee9e531864a51
+
+naver:
+  search:
+    url:
+    client-id: qo6vQszP8oxt_2uoANwz
+    client-secret: yQWCeOp37j
+
+logging:
+  level:
+    root: WARN
+    web: debug
+#    sql: debug
+#    cache: debug
+    bootstrap: trace
+#    org.hibernate.SQL: debug
+#    org.hibernate.type.descriptor.sql: trace
+    org.springframework:
+      data: DEBUG
+      web:
+        servlet.handler: info
+        filter.CommonsRequestLoggingFilter: debug
+
+
+
