@@ -1,0 +1,4 @@
+rootProject.name = 'search'
+include 'blog-search'
+include 'popular-keyword'
+

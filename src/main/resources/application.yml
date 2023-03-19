@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:blogsearch;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+      format_sql: true
+      dialect: org.hibernate.dialect.H2Dialect
+      default_batch_fetch_size: 500
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+kakao:
+  search:
+    url:
+    rest-api-key: 5282b407e6d87d4de26ee9e531864a51
+
+naver:
+  search:
+    url:
+    client-id: qo6vQszP8oxt_2uoANwz
+    client-secret: yQWCeOp37j
+
+server:
+  error:
+    include-stacktrace: NEVER
+
+logging:
+  level:
+    root: WARN
+    web: debug
+    sql: debug
+#    cache: debug
+    bootstrap: trace
+    org.hibernate.SQL: debug
+#    org.hibernate.type.descriptor.sql: trace
+    org.springframework:
+      data: DEBUG
+      web:
+        servlet.handler: info
+        filter.CommonsRequestLoggingFilter: debug
+
+
+
