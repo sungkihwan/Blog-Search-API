@@ -2,6 +2,7 @@ package com.daum.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class KakaoBlogSearchResponse {
 
     @JsonProperty("meta")
@@ -21,6 +23,7 @@ public class KakaoBlogSearchResponse {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     public static class Meta {
         @JsonProperty("total_count")
         private Integer totalCount;
@@ -35,6 +38,7 @@ public class KakaoBlogSearchResponse {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     public static class Document {
         // 블로그 글 제목
         private String title;

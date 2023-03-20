@@ -1,7 +1,28 @@
 server:
-  port: 8080
+  port: 7712
   error:
     include-stacktrace: NEVER
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:blogkeywords;MODE=MySQL;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+      format_sql: true
+      dialect: org.hibernate.dialect.H2Dialect
+      default_batch_fetch_size: 500
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
 
 kakao:
   search:
@@ -18,16 +39,18 @@ logging:
   level:
     root: WARN
     web: debug
-#    sql: debug
-#    cache: debug
+    sql: debug
+    cache: debug
     bootstrap: trace
-#    org.hibernate.SQL: debug
-#    org.hibernate.type.descriptor.sql: trace
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql: trace
     org.springframework:
       data: DEBUG
       web:
         servlet.handler: info
         filter.CommonsRequestLoggingFilter: debug
+
+
 
 
 

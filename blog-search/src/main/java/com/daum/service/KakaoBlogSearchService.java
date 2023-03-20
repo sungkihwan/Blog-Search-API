@@ -1,13 +1,16 @@
 package com.daum.service;
 
+import com.daum.common.exception.ExternalApiException;
 import com.daum.common.logging.LoggingFilter;
 import com.daum.payload.request.KakaoBlogSearchRequest;
 import com.daum.payload.response.KakaoBlogSearchResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
@@ -18,6 +21,7 @@ import static com.daum.common.constant.Constants.maxRetry;
 
 
 @Service
+@Slf4j
 public class KakaoBlogSearchService implements BlogSearchService {
 
     private final WebClient kakaoBlogSearchWebClient;
@@ -42,7 +46,8 @@ public class KakaoBlogSearchService implements BlogSearchService {
         return searchWithKakao(request)
                 .onErrorResume(e ->
                         naverBlogSearchService.search(request)
-                );
+                )
+                .onErrorResume(e -> Mono.error(new ExternalApiException("블로그 검색 API 에러가 발생했습니다.", e)));
     }
 
     private Mono<KakaoBlogSearchResponse> searchWithKakao(KakaoBlogSearchRequest request) {
@@ -50,7 +55,12 @@ public class KakaoBlogSearchService implements BlogSearchService {
                 .uri(uriBuilder -> buildKakaoUrI(request))
                 .retrieve()
                 .bodyToMono(KakaoBlogSearchResponse.class)
-                .retry(maxRetry);
+                .retry(maxRetry)
+                .doOnError(eK ->
+                        log.error("카카오 블로그 검색 API 호출에서 에러 발생: 상태코드={}, 메시지={}",
+                                ((WebClientResponseException) eK).getStatusCode(),
+                                eK.getMessage())
+                );
     }
 
     private URI buildKakaoUrI(KakaoBlogSearchRequest request) {

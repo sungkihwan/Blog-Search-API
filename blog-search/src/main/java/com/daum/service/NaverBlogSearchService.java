@@ -5,23 +5,24 @@ import com.daum.payload.request.KakaoBlogSearchRequest;
 import com.daum.payload.request.NaverBlogSearchRequest;
 import com.daum.payload.response.KakaoBlogSearchResponse;
 import com.daum.payload.response.NaverBlogSearchResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.daum.common.constant.Constants.NAVER_BLOG_SEARCH_URL;
 import static com.daum.common.constant.Constants.maxRetry;
 
 
 @Service
+@Slf4j
 public class NaverBlogSearchService implements BlogSearchService {
 
     private final WebClient naverBlogSearchWebClient;
@@ -42,7 +43,7 @@ public class NaverBlogSearchService implements BlogSearchService {
     @Override
     public Mono<KakaoBlogSearchResponse> search(KakaoBlogSearchRequest request) {
         return searchWithNaver(request.toNaverBlogSearchRequest())
-                .map(NaverBlogSearchService::convert);
+                .map(NaverBlogSearchResponse::toKakaoBlogSearchResponse);
     }
 
     private Mono<NaverBlogSearchResponse> searchWithNaver(NaverBlogSearchRequest request) {
@@ -50,7 +51,12 @@ public class NaverBlogSearchService implements BlogSearchService {
                 .uri(uriBuilder -> buildNaverUrI(request))
                 .retrieve()
                 .bodyToMono(NaverBlogSearchResponse.class)
-                .retry(maxRetry);
+                .retry(maxRetry)
+                .doOnError(eN ->
+                        log.error("네이버 블로그 검색 API 호출에서 에러 발생: 상태코드={}, 메시지={}",
+                                ((WebClientResponseException) eN).getStatusCode(),
+                                eN.getMessage())
+                );
     }
 
     private URI buildNaverUrI(NaverBlogSearchRequest request) {
@@ -71,28 +77,5 @@ public class NaverBlogSearchService implements BlogSearchService {
         }
 
         return uriComponentsBuilder.encode().build().toUri();
-    }
-
-    private static KakaoBlogSearchResponse convert(NaverBlogSearchResponse naverResponse) {
-        List<KakaoBlogSearchResponse.Document> documents = naverResponse.getItems().stream()
-                .map(NaverBlogSearchService::convertDocument)
-                .collect(Collectors.toList());
-
-        int totalCount = naverResponse.getTotal();
-        boolean isEnd = naverResponse.getStart() + naverResponse.getDisplay() >= totalCount;
-        KakaoBlogSearchResponse.Meta meta = new KakaoBlogSearchResponse.Meta(totalCount, totalCount, isEnd);
-
-        return new KakaoBlogSearchResponse(meta, documents);
-    }
-
-    private static KakaoBlogSearchResponse.Document convertDocument(NaverBlogSearchResponse.NaverBlogSearchItem naverItem) {
-        String title = naverItem.getTitle();
-        String contents = naverItem.getDescription();
-        String url = naverItem.getLink();
-        String blogName = naverItem.getBloggername();
-        String thumbnail = ""; // 썸네일 정보가 없으므로 빈 문자열로 설정
-        String dateTime = naverItem.getPostdate();
-
-        return new KakaoBlogSearchResponse.Document(title, contents, url, blogName, thumbnail, dateTime);
     }
 }

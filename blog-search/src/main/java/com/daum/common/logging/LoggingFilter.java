@@ -10,15 +10,15 @@ public class LoggingFilter {
 
     public static ExchangeFilterFunction logRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(request -> {
-            LOGGER.error("Request: {} {}", request.method(), request.url());
-            request.headers().forEach((name, values) -> values.forEach(value -> LOGGER.error("{}: {}", name, value)));
+            LOGGER.info("Request: {} {}", request.method(), request.url());
+            request.headers().forEach((name, values) -> values.forEach(value -> LOGGER.info("{}: {}", name, value)));
             return Mono.just(request);
         });
     }
 
     public static ExchangeFilterFunction logResponse() {
         return ExchangeFilterFunction.ofResponseProcessor(response -> {
-            LOGGER.error("Response: {}", response.statusCode());
+            LOGGER.info("Response: {}", response.statusCode());
             return Mono.just(response);
         });
     }
