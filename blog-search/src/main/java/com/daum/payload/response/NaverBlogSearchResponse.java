@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class NaverBlogSearchResponse {
 
-//    @JsonProperty("items")
-//    private String lastBuildDate;
     private Integer total;
     private Integer start;
     private Integer display;

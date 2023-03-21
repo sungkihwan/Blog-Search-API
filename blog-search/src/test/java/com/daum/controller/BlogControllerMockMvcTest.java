@@ -1,19 +1,13 @@
 package com.daum.controller;
 
 import com.daum.entity.PopularKeyword;
-import com.daum.payload.request.KakaoBlogSearchRequest;
-import com.daum.payload.response.KakaoBlogSearchResponse;
 import com.daum.service.KakaoBlogSearchService;
 import com.daum.service.PopularKeywordService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,8 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 public class BlogControllerMockMvcTest {
-
-    private static final Logger logger = LoggerFactory.getLogger(BlogControllerMockMvcTest.class);
 
     @Autowired
     private MockMvc mockMvc;

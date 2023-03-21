@@ -33,12 +33,10 @@ public class KakaoBlogSearchServiceTest {
 
     private KakaoBlogSearchService kakaoBlogSearchServiceUnauthorized;
 
-    private NaverBlogSearchService naverBlogSearchServiceUnauthorized;
-
     @BeforeEach
     public void setup() {
         kakaoBlogSearchServiceNaverFallback = new KakaoBlogSearchService(null, naverBlogSearchService);
-        naverBlogSearchServiceUnauthorized = new NaverBlogSearchService(null, null);
+        NaverBlogSearchService naverBlogSearchServiceUnauthorized = new NaverBlogSearchService(null, null);
         kakaoBlogSearchServiceUnauthorized = new KakaoBlogSearchService(null, naverBlogSearchServiceUnauthorized);
     }
 

@@ -8,7 +8,6 @@ import com.daum.service.KakaoBlogSearchService;
 import com.daum.service.PopularKeywordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
