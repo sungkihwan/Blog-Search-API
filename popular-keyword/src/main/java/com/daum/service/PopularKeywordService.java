@@ -43,36 +43,13 @@ public class PopularKeywordService {
         getTop10Keywords();
     }
 
-//    @Caching(evict = {
-//            @CacheEvict(value = "top10Keywords", allEntries = true)
-//    })
-//    @Transactional
-//    public void updateKeywordCount(String keyword) {
-//        popularKeywordRepository.updateKeywordCount(keyword);
-//    }
-
     @Transactional
-    public void insertKeyword(String keyword) {
-        popularKeywordRepository.save(new PopularKeyword(keyword, 1L));
+    public void updateKeyword(String keyword) {
+        int updated = popularKeywordRepository.updateKeywordCount(keyword);
+        if (updated == 0) {
+            popularKeywordCustomRepository.upsertKeyword(keyword, 1L);
+        }
     }
-
-//    @Transactional
-//    public void updateKeywordCount(String keyword) {
-//        Optional<PopularKeyword> lockedPopularKeywordOpt = popularKeywordRepository.findByIdWithLock(keyword);
-//
-//        if (lockedPopularKeywordOpt.isPresent()) {
-//            PopularKeyword popularKeyword = lockedPopularKeywordOpt.get();
-//            popularKeyword.setCount(popularKeyword.getCount() + 1);
-//            popularKeywordRepository.save(popularKeyword);
-//        } else {
-//            try {
-//                popularKeywordCustomRepository.insertKeyword(keyword, 1L);
-//            } catch (Exception e) {
-//                // 이미 존재하는 경우, 재귀적으로 메소드를 호출하여 업데이트를 시도합니다.
-//                updateKeywordCount(keyword);
-//            }
-//        }
-//    }
 
     public PopularKeyword findByKeyword(String keyword) {
         return popularKeywordRepository.findByKeyword(keyword)

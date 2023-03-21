@@ -20,10 +20,6 @@ public interface PopularKeywordRepository extends JpaRepository<PopularKeyword, 
 
     Optional<PopularKeyword> findByKeyword(String keyword);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT p FROM PopularKeyword p WHERE p.keyword = :keyword")
-    Optional<PopularKeyword> findByIdWithLock(@Param("keyword") String keyword);
-
     @Modifying
     @Query("UPDATE PopularKeyword p SET p.count = p.count + 1 WHERE p.keyword = :keyword")
     int updateKeywordCount(@Param("keyword") String keyword);

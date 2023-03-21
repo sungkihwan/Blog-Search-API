@@ -12,7 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "popular_keyword")
-@SQLInsert(sql="INSERT INTO popular_keyword(keyword, count) VALUES (?, ?) ON DUPLICATE KEY UPDATE count = count + 1" )
 public class PopularKeyword {
 
     @Id

@@ -1,25 +1,26 @@
 package com.daum.controller;
 
-import com.daum.SearchApplication;
+import com.daum.payload.response.KakaoBlogSearchResponse;
 import com.daum.service.KakaoBlogSearchService;
 import com.daum.service.PopularKeywordService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 //@ContextConfiguration(classes = SearchApplication.class)
 @WebFluxTest(controllers = BlogSearchController.class)
-public class BlogSearchControllerTest {
+public class BlogSearchControllerWebTestClientTest {
 
 //    private static final Logger logger = LoggerFactory.getLogger(BlogSearchControllerTest.class);
 
@@ -33,6 +34,7 @@ public class BlogSearchControllerTest {
     private PopularKeywordService popularKeywordService;
 
     @Test
+    @DisplayName("WebClient 잘못된 요청 매개 변수 처리 테스트 (WebExchangeBindException)")
     public void invalidRequestAllParametersExceptionHandling() {
         // Given
         MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
@@ -51,11 +53,11 @@ public class BlogSearchControllerTest {
 //                .getResponseBody()
 //                .single(); // Mono<String> 변환
 //
-//        responseBody.subscribe(response -> logger.error("응답 본문: {}", response));
+//        responseBody.subscribe(response -> logger.error("본문: {}", response));
 
         // When
         webTestClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/api/v1/blog/search")
+                .uri(uriBuilder -> uriBuilder.path("/api/v1/search/blog")
                         .queryParams(requestData)
                         .build())
                 .exchange()
@@ -70,6 +72,7 @@ public class BlogSearchControllerTest {
     }
 
     @Test
+    @DisplayName("WebClient 일부 파라미터 잘못된 요청 처리 테스트")
     public void invalidRequestPageAndSizeParametersExceptionHandling() {
         // Given
         MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
@@ -80,7 +83,7 @@ public class BlogSearchControllerTest {
 
         // When
         webTestClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/api/v1/blog/search")
+                .uri(uriBuilder -> uriBuilder.path("/api/v1/search/blog")
                         .queryParams(requestData)
                         .build())
                 .exchange()
@@ -90,5 +93,26 @@ public class BlogSearchControllerTest {
                 .jsonPath("$.errors[?(@ =~ /^page.*/)]").isEqualTo("page: 페이지 번호는 50 이하여야 합니다.")
                 .jsonPath("$.errors[?(@ =~ /^size.*/)]").isEqualTo("size: 페이지 크기는 50 이하여야 합니다.");
 
+    }
+
+    @Test
+    @DisplayName("컨트롤러 성공 검증")
+    public void validRequestSuccessHandling() {
+        // Given
+        MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
+        requestData.add("query", "고구마");
+        requestData.add("sort", "recency");
+        requestData.add("page", "1");
+        requestData.add("size", "10");
+
+        // When & Then
+        webTestClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/api/v1/search/blog")
+                        .queryParams(requestData)
+                        .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(KakaoBlogSearchResponse.class)
+                .value(response -> assertThat(response.getDocuments().size()).isEqualTo(10));
     }
 }

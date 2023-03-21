@@ -6,6 +6,7 @@ import com.daum.common.exception.ExternalApiException;
 import com.daum.payload.request.KakaoBlogSearchRequest;
 import com.daum.payload.response.KakaoBlogSearchResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -42,6 +43,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
+    @DisplayName("Blog 검색하기 성공 테스트")
     public void kakaoSearchSuccess() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -62,6 +64,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
+    @DisplayName("Blog 검색하기 모든 파라미터 성공 테스트")
     public void KakaoSearchAllParametersSuccess() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -84,6 +87,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
+    @DisplayName("Blog 검색하기 Kakao, Naver Key 없을 경우 401에러")
     public void unauthorizedSearchRequest() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -102,6 +106,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
+    @DisplayName("Kakao Error시 Naver 호출 테스트")
     public void kakaoSearchToNaverFallbackTest() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -117,6 +122,13 @@ public class KakaoBlogSearchServiceTest {
         // Kakao API 호출 시 (key=null) 401에러로 Naver API 호출 결과를 받아옵니다.
         Mono<KakaoBlogSearchResponse> kakaoResponse = kakaoBlogSearchServiceNaverFallback.search(request);
 
+        StepVerifier.create(kakaoResponse)
+                .assertNext(res -> {
+                    assertNotNull(res.getMeta());
+                    assertNotNull(res.getDocuments());
+                })
+                .verifyComplete();
+
         // Then
         Mono<Boolean> isEqual = kakaoResponse.zipWith(naverResponse, Objects::equals);
 
@@ -126,6 +138,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
+    @DisplayName("Kakao 잘못된 입력 테스트")
     public void kakaoSearchBadRequest() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -146,6 +159,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
+    @DisplayName("Naver 블로그 검색 성공 테스트")
     public void successNaverSearchProcessing() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -167,6 +181,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
+    @DisplayName("빈 결과 테스트")
     public void searchEmptyResult() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest

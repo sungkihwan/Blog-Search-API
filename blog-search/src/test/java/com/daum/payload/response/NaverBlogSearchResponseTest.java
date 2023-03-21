@@ -1,6 +1,7 @@
 package com.daum.payload.response;
 
 import com.daum.SearchApplication;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class NaverBlogSearchResponseTest {
 
     @Test
+    @DisplayName("Naver Response -> Kakao Response 변환 테스트")
     public void toKakaoBlogSearchResponseTest() {
         // Given
         NaverBlogSearchResponse naverResponse = new NaverBlogSearchResponse();

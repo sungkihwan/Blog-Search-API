@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/blog")
+@RequestMapping("/api/v1")
 @Validated
 public class BlogSearchController {
 
@@ -23,15 +23,15 @@ public class BlogSearchController {
 
     private final PopularKeywordService popularKeywordService;
 
-    @GetMapping("/search")
+    @GetMapping("/search/blog")
     public Mono<KakaoBlogSearchResponse> searchBlog(
             @Valid KakaoBlogSearchRequest request
     ) {
-        popularKeywordService.insertKeyword(request.getQuery());
+        popularKeywordService.updateKeyword(request.getQuery());
         return kakaoBlogSearchService.search(request);
     }
 
-    @GetMapping("/popular-keywords/top10")
+    @GetMapping("/blog/popular-keywords/top10")
     public List<PopularKeyword> getTop10Keywords() {
         return popularKeywordService.getTop10Keywords();
     }

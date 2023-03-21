@@ -1,6 +1,7 @@
 package com.daum.payload.request;
 
 import com.daum.SearchApplication;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -11,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class KakaoBlogSearchRequestTest {
     @Test
+    @DisplayName("Kakao Parameters -> Naver Parameters 변환 테스트")
     public void toNaverBlogSearchRequestTest() {
         // Given
         KakaoBlogSearchRequest kakaoRequest = KakaoBlogSearchRequest.builder()
