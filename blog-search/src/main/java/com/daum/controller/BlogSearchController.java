@@ -31,7 +31,7 @@ public class BlogSearchController {
             @Valid KakaoBlogSearchRequest request
     ) {
         // popularKeywordService.updateKeyword(request.getQuery()); 동기식
-        // 비동기식 -> Kafka 등의 Message Broker Or MQ 전환
+        // 비동기식 pub - sub -> Message Broker 전환
         eventPublisher.publishEvent(new BlogSearchKeywordUpdateEvent(this, request.getQuery()));
         return kakaoBlogSearchService.search(request);
     }

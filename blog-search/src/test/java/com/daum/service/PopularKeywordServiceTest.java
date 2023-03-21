@@ -1,6 +1,7 @@
 package com.daum.service;
 
 import com.daum.entity.PopularKeyword;
+import com.daum.event.BlogSearchKeywordUpdateEvent;
 import com.daum.repository.PopularKeywordRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
@@ -25,10 +27,10 @@ public class PopularKeywordServiceTest {
     @Autowired
     private PopularKeywordService popularKeywordService;
 
-    @Autowired
-    private PopularKeywordRepository popularKeywordRepository;
-
     private ExecutorService executorService;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @BeforeEach
     public void setUp() {
@@ -46,32 +48,32 @@ public class PopularKeywordServiceTest {
 
         int numOfCallsOfKeyword1 = 20;
         int numOfCallsOfKeyword2 = 25;
-        int numOfCallsOfKeyword3 = 40;
+        int numOfCallsOfKeyword3 = 200;
         int numOfCallsOfKeyword4 = 12;
 
         // 비동기 동시 호출 테스트 (동시성 컨트롤)
         List<CompletableFuture<Void>> futures = new ArrayList<>();
 
         for (int i = 0; i < numOfCallsOfKeyword1; i++) {
-            CompletableFuture.runAsync(() -> popularKeywordService.updateKeyword(keyword1), executorService);
+            CompletableFuture.runAsync(() -> eventPublisher.publishEvent(new BlogSearchKeywordUpdateEvent(this, keyword1)), executorService);
         }
 
         for (int i = 0; i < numOfCallsOfKeyword2; i++) {
-            CompletableFuture.runAsync(() -> popularKeywordService.updateKeyword(keyword2), executorService);
+            CompletableFuture.runAsync(() -> eventPublisher.publishEvent(new BlogSearchKeywordUpdateEvent(this, keyword2)), executorService);
         }
 
         for (int i = 0; i < numOfCallsOfKeyword3; i++) {
-            CompletableFuture.runAsync(() -> popularKeywordService.updateKeyword(keyword3), executorService);
+            CompletableFuture.runAsync(() -> eventPublisher.publishEvent(new BlogSearchKeywordUpdateEvent(this, keyword3)), executorService);
         }
 
         for (int i = 0; i < numOfCallsOfKeyword4; i++) {
-            CompletableFuture.runAsync(() -> popularKeywordService.updateKeyword(keyword4), executorService);
+            CompletableFuture.runAsync(() -> eventPublisher.publishEvent(new BlogSearchKeywordUpdateEvent(this, keyword4)), executorService);
         }
 
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
         // top 10 검증을 위해 추가 데이터 입력
-        for (int i = 1; i <= 8; i++) {
+        for (int i = 1; i < 10; i++) {
             popularKeywordService.updateKeyword("top10검증" + i);
         }
 

@@ -1,14 +1,16 @@
 package com.daum.service;
 
+import com.daum.common.exception.KeywordNotFoundException;
+import com.daum.common.exception.KeywordUpdateException;
 import com.daum.entity.PopularKeyword;
 import com.daum.event.BlogSearchKeywordUpdateEvent;
 import com.daum.repository.PopularKeywordCustomRepository;
 import com.daum.repository.PopularKeywordRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PopularKeywordService {
-
-//    private final int cacheRate;
 
     private final PopularKeywordRepository popularKeywordRepository;
 
@@ -45,23 +46,23 @@ public class PopularKeywordService {
         getTop10Keywords();
     }
 
-    @EventListener
     @Transactional
-    public void handleKeywordUpdateEvent(BlogSearchKeywordUpdateEvent event) {
-        updateKeyword(event.getKeyword());
-    }
-
-//    @Transactional
     public void updateKeyword(String keyword) {
-        int updated = popularKeywordRepository.updateKeywordCount(keyword);
-        if (updated == 0) {
-            popularKeywordCustomRepository.upsertKeyword(keyword, 1L);
+        try {
+            int updated = popularKeywordRepository.updateKeywordCount(keyword);
+            if (updated == 0) {
+                popularKeywordCustomRepository.upsertKeyword(keyword, 1L);
+            }
+        } catch (Exception e) {
+            log.error("키워드 업데이트 중 오류 발생: {}", e.getMessage(), e);
+            throw new KeywordUpdateException("키워드 업데이트 중 오류가 발생했습니다.", e);
         }
     }
 
     // Test 목적
     public PopularKeyword findByKeyword(String keyword) {
         return popularKeywordRepository.findByKeyword(keyword)
-                .orElseThrow();
+                .orElseThrow(()-> new KeywordNotFoundException("키워드를 찾을 수 없습니다."));
+
     }
 }

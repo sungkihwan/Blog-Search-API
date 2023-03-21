@@ -43,6 +43,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getHttpStatus()).body(response);
     }
 
+    @ExceptionHandler(KeywordNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleKeywordNotFoundException(KeywordNotFoundException e, HttpServletRequest request) {
+        ErrorResponse response =
+                createErrorResponse(HttpStatus.NOT_FOUND, request.getRequestURI(), "키워드를 찾을 수 없습니다.", Collections.singletonList(e.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(KeywordUpdateException.class)
+    public ResponseEntity<ErrorResponse> handleKeywordUpdateException(KeywordUpdateException e, HttpServletRequest request) {
+        ErrorResponse response =
+                createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, request.getRequestURI(), "키워드 업데이트 중 오류가 발생했습니다.", Collections.singletonList(e.getMessage()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+
     private List<String> getErrorsFromFieldErrors(List<FieldError> fieldErrors) {
         return fieldErrors.stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)

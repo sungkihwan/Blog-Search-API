@@ -1,8 +1,10 @@
 package com.daum.controller;
 
+import com.daum.payload.request.KakaoBlogSearchRequest;
 import com.daum.payload.response.KakaoBlogSearchResponse;
 import com.daum.service.KakaoBlogSearchService;
 import com.daum.service.PopularKeywordService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
-
 
 //@ContextConfiguration(classes = SearchApplication.class)
 @WebFluxTest(controllers = BlogSearchController.class)
@@ -32,6 +39,25 @@ public class BlogSearchControllerWebTestClientTest {
 
     @MockBean
     private PopularKeywordService popularKeywordService;
+
+    @BeforeEach
+    public void setUp() {
+        // 테스트용 KakaoBlogSearchResponse를 생성
+        KakaoBlogSearchResponse testResponse = new KakaoBlogSearchResponse();
+        List<KakaoBlogSearchResponse.Document> documents = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            documents.add(
+                    KakaoBlogSearchResponse.Document.builder()
+                            .contents("")
+                            .build()
+            );
+        }
+        testResponse.setDocuments(documents);
+        testResponse.setMeta(null);
+
+        // KakaoBlogSearchService의 search 메소드가 testResponse를 반환하도록 설정
+        when(kakaoBlogSearchService.search(any(KakaoBlogSearchRequest.class))).thenReturn(Mono.just(testResponse));
+    }
 
     @Test
     @DisplayName("WebClient 잘못된 요청 매개 변수 처리 테스트 (WebExchangeBindException)")
