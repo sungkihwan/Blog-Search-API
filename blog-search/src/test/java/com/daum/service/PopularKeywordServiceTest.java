@@ -1,5 +1,7 @@
 package com.daum.service;
 
+import com.daum.common.exception.KeywordNotFoundException;
+import com.daum.common.exception.KeywordUpdateException;
 import com.daum.entity.PopularKeyword;
 import com.daum.event.BlogSearchKeywordUpdateEvent;
 import com.daum.repository.PopularKeywordRepository;
@@ -7,18 +9,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +35,9 @@ public class PopularKeywordServiceTest {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
+    @InjectMocks
+    private PopularKeywordService popularKeywordMockService;
+
     @BeforeEach
     public void setUp() {
         executorService = Executors.newFixedThreadPool(20);
@@ -41,14 +47,14 @@ public class PopularKeywordServiceTest {
     @DisplayName("같은 키워드 동시저장 요청 및 탑텐 리스트 검증 테스트")
     public void updateKeywordCountAsyncAndGetTop10ListTest() throws InterruptedException {
         // 테스트 데이터 준비
-        String keyword1 = "간장게장";
-        String keyword2 = "복숭아";
-        String keyword3 = "고구마";
-        String keyword4 = "라면";
+        String keyword1 = "간장게에장";
+        String keyword2 = "복숭아아아";
+        String keyword3 = "고구마마망";
+        String keyword4 = "라면이이먹고싶어";
 
-        int numOfCallsOfKeyword1 = 20;
-        int numOfCallsOfKeyword2 = 25;
-        int numOfCallsOfKeyword3 = 200;
+        int numOfCallsOfKeyword1 = 50;
+        int numOfCallsOfKeyword2 = 70;
+        int numOfCallsOfKeyword3 = 100;
         int numOfCallsOfKeyword4 = 12;
 
         // 비동기 동시 호출 테스트 (동시성 컨트롤)
@@ -95,6 +101,20 @@ public class PopularKeywordServiceTest {
         assertThat(popularKeywordList.get(2).getCount()).isEqualTo(numOfCallsOfKeyword1);
         assertThat(popularKeywordList.get(3).getCount()).isEqualTo(numOfCallsOfKeyword4);
 
+    }
+
+    @Test
+    @DisplayName("키워드 업데이트 에러 발생")
+    public void keywordUpdateException() {
+        String keyword = "테스트";
+        assertThrows(KeywordUpdateException.class, () -> popularKeywordMockService.updateKeyword(keyword));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 키워드")
+    public void keywordNotFoundException() {
+        String keyword = "존재하지않는키워드ㄴㄴㄹㄸㄹㄴㅇㄹㄴㅇㅁㄴ";
+        assertThrows(KeywordNotFoundException.class, () -> popularKeywordService.findByKeyword(keyword));
     }
 
 }

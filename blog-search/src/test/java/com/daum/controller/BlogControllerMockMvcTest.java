@@ -1,8 +1,10 @@
 package com.daum.controller;
 
+import com.daum.entity.PopularKeyword;
 import com.daum.payload.request.KakaoBlogSearchRequest;
 import com.daum.payload.response.KakaoBlogSearchResponse;
 import com.daum.service.KakaoBlogSearchService;
+import com.daum.service.PopularKeywordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,19 +22,17 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -48,8 +48,11 @@ public class BlogControllerMockMvcTest {
     @MockBean
     private KakaoBlogSearchService kakaoBlogSearchService;
 
+    @MockBean
+    private PopularKeywordService popularKeywordService;
+
     @Test
-    @DisplayName("MockMvc 잘못된 요청 매개 변수 처리 테스트 (BindException)")
+    @DisplayName("블로그 검색 잘못된 리퀘스트 (BindException)")
     void invalidRequestExceptionHandling() throws Exception {
         // Given
         MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
@@ -104,7 +107,7 @@ public class BlogControllerMockMvcTest {
     }
 
     @Test
-    @DisplayName("블로그 검색 컨트롤러 성공 검증")
+    @DisplayName("블로그 검색 컨트롤러 성공")
     public void validRequestSuccessHandling() throws Exception {
         // Given
         MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
@@ -118,6 +121,41 @@ public class BlogControllerMockMvcTest {
                         .queryParams(requestData)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+
+    @Test
+    @DisplayName("탑텐 키워드 리스트 성공")
+    public void getTop10KeywordsWithSuccess() throws Exception {
+        // Given
+        List<PopularKeyword> popularKeywords = Arrays.asList(
+                new PopularKeyword("키워드1", 10L),
+                new PopularKeyword("키워드2", 9L),
+                new PopularKeyword("키워드3", 8L)
+        );
+
+        when(popularKeywordService.getTop10Keywords()).thenReturn(popularKeywords);
+
+        // When & Then
+        mockMvc.perform(get("/api/v1/blog/popular-keywords/top10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].keyword").value("키워드1"))
+                .andExpect(jsonPath("$[0].count").value(10))
+                .andExpect(jsonPath("$[1].keyword").value("키워드2"))
+                .andExpect(jsonPath("$[1].count").value(9))
+                .andExpect(jsonPath("$[2].keyword").value("키워드3"))
+                .andExpect(jsonPath("$[2].count").value(8));
+    }
+
+    @Test
+    @DisplayName("탑텐 키워드 리스트 에러")
+    public void getTop10KeywordsWithError() throws Exception {
+        // Given
+        when(popularKeywordService.getTop10Keywords()).thenThrow(new RuntimeException("서비스 에러"));
+
+        // When & Then
+        mockMvc.perform(get("/api/v1/blog/popular-keywords/top10"))
+                .andExpect(status().isInternalServerError());
     }
 }
 

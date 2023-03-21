@@ -57,6 +57,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleUnexpectedRuntimeException(RuntimeException e, HttpServletRequest request) {
+        ErrorResponse response =
+                createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, request.getRequestURI(), "예기치 않은 오류가 발생했습니다.", Collections.singletonList(e.getMessage()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
 
     private List<String> getErrorsFromFieldErrors(List<FieldError> fieldErrors) {
         return fieldErrors.stream()

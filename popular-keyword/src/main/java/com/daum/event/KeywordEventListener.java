@@ -12,6 +12,7 @@ public class KeywordEventListener {
 
     private final PopularKeywordService popularKeywordService;
 
+//    @Transactional
     @EventListener
     public void handleKeywordUpdateEvent(BlogSearchKeywordUpdateEvent event) {
         popularKeywordService.updateKeyword(event.getKeyword());

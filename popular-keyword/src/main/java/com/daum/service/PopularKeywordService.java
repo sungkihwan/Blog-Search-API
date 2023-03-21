@@ -3,7 +3,6 @@ package com.daum.service;
 import com.daum.common.exception.KeywordNotFoundException;
 import com.daum.common.exception.KeywordUpdateException;
 import com.daum.entity.PopularKeyword;
-import com.daum.event.BlogSearchKeywordUpdateEvent;
 import com.daum.repository.PopularKeywordCustomRepository;
 import com.daum.repository.PopularKeywordRepository;
 import lombok.RequiredArgsConstructor;

@@ -43,7 +43,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
-    @DisplayName("Blog 검색하기 성공 테스트")
+    @DisplayName("Blog 검색하기 성공")
     public void kakaoSearchSuccess() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -64,7 +64,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
-    @DisplayName("Blog 검색하기 모든 파라미터 성공 테스트")
+    @DisplayName("Blog 검색하기 모든 파라미터 성공")
     public void KakaoSearchAllParametersSuccess() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -87,7 +87,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
-    @DisplayName("Blog 검색하기 Kakao, Naver Key 없을 경우 401에러")
+    @DisplayName("Blog 검색 Kakao, Naver Key 없는 경우")
     public void unauthorizedSearchRequest() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -138,7 +138,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
-    @DisplayName("Kakao 잘못된 입력 테스트")
+    @DisplayName("Kakao 블로그 검색 배드 리퀘스트")
     public void kakaoSearchBadRequest() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -159,7 +159,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
-    @DisplayName("Naver 블로그 검색 성공 테스트")
+    @DisplayName("Naver 블로그 검색 기능 성공")
     public void successNaverSearchProcessing() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
@@ -181,7 +181,7 @@ public class KakaoBlogSearchServiceTest {
     }
 
     @Test
-    @DisplayName("빈 결과 테스트")
+    @DisplayName("검색 결과가 비어있는 경우")
     public void searchEmptyResult() {
         // Given
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest

@@ -22,14 +22,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
 //@ContextConfiguration(classes = SearchApplication.class)
 @WebFluxTest(controllers = BlogSearchController.class)
 public class BlogSearchControllerWebTestClientTest {
-
-//    private static final Logger logger = LoggerFactory.getLogger(BlogSearchControllerTest.class);
 
     @Autowired
     private WebTestClient webTestClient;
@@ -60,7 +55,7 @@ public class BlogSearchControllerWebTestClientTest {
     }
 
     @Test
-    @DisplayName("WebClient 잘못된 요청 매개 변수 처리 테스트 (WebExchangeBindException)")
+    @DisplayName("블로그 검색 잘못된 리퀘스트 (WebExchangeBindException)")
     public void invalidRequestAllParametersExceptionHandling() {
         // Given
         MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
@@ -98,7 +93,7 @@ public class BlogSearchControllerWebTestClientTest {
     }
 
     @Test
-    @DisplayName("WebClient 일부 파라미터 잘못된 요청 처리 테스트")
+    @DisplayName("블로그 검색 일부 파라미터 잘못된 리퀘스트")
     public void invalidRequestPageAndSizeParametersExceptionHandling() {
         // Given
         MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
@@ -122,7 +117,7 @@ public class BlogSearchControllerWebTestClientTest {
     }
 
     @Test
-    @DisplayName("컨트롤러 성공 검증")
+    @DisplayName("블로그 검색 요청 성공")
     public void validRequestSuccessHandling() {
         // Given
         MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
