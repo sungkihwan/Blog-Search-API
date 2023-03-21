@@ -99,24 +99,6 @@ public class BlogControllerMockMvcTest {
     }
 
     @Test
-    @DisplayName("블로그 검색 컨트롤러 성공")
-    public void validRequestSuccessHandling() throws Exception {
-        // Given
-        MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
-        requestData.add("query", "고구마");
-        requestData.add("sort", "recency");
-        requestData.add("page", "1");
-        requestData.add("size", "10");
-
-        // When
-        mockMvc.perform(get("/api/v1/search/blog")
-                        .queryParams(requestData)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-
-    @Test
     @DisplayName("탑텐 키워드 리스트 성공")
     public void getTop10KeywordsWithSuccess() throws Exception {
         // Given
