@@ -1,11 +1,14 @@
 package com.daum.controller;
 
-import com.daum.payload.request.KakaoBlogSearchRequest;
+import com.daum.payload.response.KakaoBlogSearchResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -26,6 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 public class BlogControllerMockMvcTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(BlogControllerMockMvcTest.class);
 
     @Autowired
     private MockMvc mockMvc;
@@ -85,5 +91,30 @@ public class BlogControllerMockMvcTest {
         assertThat(pageErrorMessageFound).isTrue();
     }
 
+    @Test
+    @DisplayName("컨트롤러 성공 검증")
+    public void validRequestSuccessHandling() throws Exception {
+        // Given
+        MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
+        requestData.add("query", "고구마");
+        requestData.add("sort", "recency");
+        requestData.add("page", "1");
+        requestData.add("size", "10");
+
+        // When
+        MvcResult mvcResult = mockMvc.perform(get("/api/v1/search/blog")
+                        .queryParams(requestData)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Then
+        String responseBody = mvcResult.getResponse().getContentAsString();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        KakaoBlogSearchResponse response = objectMapper.readValue(responseBody, KakaoBlogSearchResponse.class);
+
+        assertThat(response.getDocuments().size()).isEqualTo(10);
+    }
 }
 

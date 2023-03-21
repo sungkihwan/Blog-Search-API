@@ -31,9 +31,11 @@ public class PopularKeywordService {
         return popularKeywordRepository.findTop10ByOrderByCountDesc();
     }
 
-    // 10초 주기로 캐시를 새로 넣음
-    // 데이터가 많아질 경우 -> Redis SortedSet
-    // 실시간 Window 필요한 경우 -> Batch & Stream
+    // 10초 주기로 캐시를 새로 넣음 -> 기준에 따라 변경
+    // 데이터가 많아질 경우
+    // Redis SortedSet
+    // Redis Cache & Batch
+    // Window 필요한 경우 or 실시간성 -> Batch & Stream
     @Async
     @Scheduled(fixedRate = 10000)
     @Caching(evict = {
@@ -51,6 +53,8 @@ public class PopularKeywordService {
         }
     }
 
+
+    // Test 목적
     public PopularKeyword findByKeyword(String keyword) {
         return popularKeywordRepository.findByKeyword(keyword)
                 .orElseThrow();
