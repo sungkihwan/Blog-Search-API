@@ -80,15 +80,14 @@ cd 다운로드 폴더
 
 </aside>
 
-### [`http://localhost:7712/](http://localhost:7712/)api/v1/blog/search?query={query}&size={size}&page={page}&sort={sort}`
+### `http://localhost:7712/api/v1/blog/search?query={query}&size={size}&page={page}&sort={sort}`
 
 - HttpMethod
     - Get
 - Request
     
-    ex) [`http://localhost:7712](http://localhost:7712/)/api/v1/blog/search?query=간장게장&size=1&page=3&sort=accuracy`
-    
-    ![스크린샷 2023-03-21 오후 11.33.46.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/aaf50da3-9824-4bc1-a379-26e01d182040/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2023-03-21_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_11.33.46.png)
+    ex) `http://localhost:7712/api/v1/blog/search?query=간장게장&size=1&page=3&sort=accuracy`
+    <img width="808" alt="스크린샷 2023-03-21 오후 11 33 46" src="https://user-images.githubusercontent.com/61499337/226783383-7a14c7bd-c174-49a9-958f-7f5dee20de82.png">
     
 - HttpStatus
     - Success : 200
@@ -129,7 +128,7 @@ cd 다운로드 폴더
 
 </aside>
 
-### [`http://localhost:7712/](http://localhost:7712/)api/v1/blog/popular-keywords/top10`
+### `http://localhost:7712/api/v1/blog/popular-keywords/top10`
 
 - HttpMethod
     - Get
@@ -224,7 +223,7 @@ public class GlobalExceptionHandler {
 
 # 테스트 케이스 및 테스트 커버리지
 
-![스크린샷 2023-03-21 오후 11.00.46.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/dddead5e-fd16-4cf1-9b75-923835b8e1aa/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2023-03-21_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_11.00.46.png)
+<img width="547" alt="스크린샷 2023-03-21 오후 11 00 46" src="https://user-images.githubusercontent.com/61499337/226783551-13483d4b-a233-4b53-86d8-9909f77fe3b8.png">
 
 1. controller에서 제대로 데이터를 받을 수 있는지 parameter validation은 하고 있는지 등을 테스트 합니다.
 2. Kakao Error시 Naver API를 호출하는데 이때 리퀘스트 객체와 리스폰스 객체를 제대로 변환하는지 테스트 합니다.
@@ -236,5 +235,7 @@ public class GlobalExceptionHandler {
     - 여러 파드에서 돌아가는 애플리케이션이더라도 + 1을 증가시키는데 문제가 없도록 동시 100회 이상의 비동기 요청을 테스트합니다. (단일 애플리케이션이 아니라고 가정하여 syncronize로 구현하지 않았습니다.)
     - 요청 후에 탑텐 리스트 결과가 정상적으로 조회되는지 검증합니다.
     - 키워드 업데이트 및 조회시 에러가 발생하는 상황을 가정합니다.
+    
+<img width="715" alt="스크린샷 2023-03-21 오후 10 59 33" src="https://user-images.githubusercontent.com/61499337/226783573-e80e66b3-5615-4b51-910f-2b2185685ec3.png">
 
-![스크린샷 2023-03-21 오후 10.59.33.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bd6655ec-7e12-4447-834a-df8bb1b11930/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2023-03-21_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.59.33.png)
+
