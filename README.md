@@ -1,7 +1,3 @@
-[목차]
-
-# 깃허브 레포 :  [https://github.com/sungkihwan/Blog-Search-API](https://github.com/sungkihwan/Blog-Search-API)
-
 # 애플리케이션 실행 방법
 
 ### 다운로드링크 [https://github.com/sungkihwan/Blog-Search-API/raw/main/blog-search-0.0.1-SNAPSHOT.jar](https://github.com/sungkihwan/Blog-Search-API/raw/main/blog-search-0.0.1-SNAPSHOT.jar)
