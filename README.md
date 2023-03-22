@@ -56,8 +56,7 @@ cd 다운로드 폴더
 | Junit5 | 테스트 코드 작성 |
 
 # 프로젝트 구조
-
-![스크린샷 2023-03-21 오후 11.06.40.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/36bce8ab-ad2e-44bd-b763-a5297c7b3df7/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2023-03-21_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_11.06.40.png)
+<img width="426" alt="스크린샷 2023-03-21 오후 11 06 40" src="https://user-images.githubusercontent.com/61499337/226783151-66a693c2-d6bb-4143-a6f6-457703c40a14.png">
 
 1. blog-search, popular-keyword 멀티 모듈로 구성되어 있습니다.
 2. 인스턴스로 띄워지는 모듈은 blog-search 하나입니다.
