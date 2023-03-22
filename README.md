@@ -159,7 +159,7 @@ ex) batch & stream
 
 | 기능 | 사용 목적 |
 | --- | --- |
-| @RestController, @Service, @RequiredArgsConstructor | Bean 객체로 만들며 DI 종속성 주입 기능, Json 객체로 리스폰스 등 |
+| @RestController, @Service, @RequiredArgsConstructor | Bean 객체로 만들며 DI 종속성 주입 기능, Json타입으로 리스폰스 등 |
 | @EventListener | eventBus 형태로 특정 이벤트를 발행하여 비동기식 동작을 하기 위해 사용 |
 | @Valid | parameter 검증을 위해 사용 |
 | @ExceptionHandler,  @RestControllerAdvice  | exception handling을 위해서 사용 |
