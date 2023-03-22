@@ -86,7 +86,7 @@ cd 다운로드 폴더
     - Get
 - Request
     
-    ex) `http://localhost:7712/api/v1/search/blog?query=간장게장&size=1&page=3&sort=accuracy`
+    ex) http://localhost:7712/api/v1/search/blog?query=간장게장&size=1&page=3&sort=accuracy
     <img width="808" alt="스크린샷 2023-03-21 오후 11 33 46" src="https://user-images.githubusercontent.com/61499337/226783383-7a14c7bd-c174-49a9-958f-7f5dee20de82.png">
     
 - HttpStatus
@@ -127,7 +127,7 @@ cd 다운로드 폴더
 
 </aside>
 
-### `http://localhost:7712/api/v1/blog/popular-keywords/top10`
+### http://localhost:7712/api/v1/blog/popular-keywords/top10
 
 - HttpMethod
     - Get
