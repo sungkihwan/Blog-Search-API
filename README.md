@@ -80,18 +80,18 @@ cd 다운로드 폴더
 
 </aside>
 
-### `http://localhost:7712/api/v1/blog/search?query={query}&size={size}&page={page}&sort={sort}`
+### `http://localhost:7712/api/v1/search/blog?query={query}&size={size}&page={page}&sort={sort}`
 
 - HttpMethod
     - Get
 - Request
     
-    ex) `http://localhost:7712/api/v1/blog/search?query=간장게장&size=1&page=3&sort=accuracy`
+    ex) `http://localhost:7712/api/v1/search/blog?query=간장게장&size=1&page=3&sort=accuracy`
     <img width="808" alt="스크린샷 2023-03-21 오후 11 33 46" src="https://user-images.githubusercontent.com/61499337/226783383-7a14c7bd-c174-49a9-958f-7f5dee20de82.png">
     
 - HttpStatus
     - Success : 200
-    - 잘못된 파라미터 요청(Bad Request) : 400  ex :`/api/v1/blog/search?size=100&page=3&sort=accuracy`
+    - 잘못된 파라미터 요청(Bad Request) : 400  ex :`/api/v1/search/blog?size=100&page=3&sort=accuracy`
     - 카카오, 네이버 API 에러 : 4xx
     - 서버 에러 : 500
 - Response
