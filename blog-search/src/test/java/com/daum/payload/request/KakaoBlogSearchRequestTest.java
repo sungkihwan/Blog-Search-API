@@ -15,8 +15,8 @@ public class KakaoBlogSearchRequestTest {
         KakaoBlogSearchRequest kakaoRequest = KakaoBlogSearchRequest.builder()
                 .query("test")
                 .sort("accuracy")
-                .page(2)
-                .size(10)
+                .page(30)
+                .size(40)
                 .build();
 
         // When
@@ -25,7 +25,7 @@ public class KakaoBlogSearchRequestTest {
         // Then
         assertThat(naverRequest.getQuery()).isEqualTo(kakaoRequest.getQuery());
         assertThat(naverRequest.getSort()).isEqualTo("sim");
-        assertThat(naverRequest.getStart()).isEqualTo(11);
+        assertThat(naverRequest.getStart()).isEqualTo(1000);
         assertThat(naverRequest.getDisplay()).isEqualTo(kakaoRequest.getSize());
     }
 

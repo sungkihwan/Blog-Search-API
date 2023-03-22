@@ -52,7 +52,10 @@ public class KakaoBlogSearchRequest {
 
     private Integer convertStart(Integer page, Integer size) {
         if (page != null && size != null) {
-            return (page - 1) * size + 1;
+            int naverMaxStart = 1000;
+            int startValue = (page - 1) * size + 1;
+
+            return Math.min(startValue, naverMaxStart);
         } else {
             return null;
         }

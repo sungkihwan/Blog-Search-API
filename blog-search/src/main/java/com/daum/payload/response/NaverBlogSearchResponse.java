@@ -1,5 +1,7 @@
 package com.daum.payload.response;
 
+import com.daum.payload.request.KakaoBlogSearchRequest;
+import com.daum.payload.request.NaverBlogSearchRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,10 +39,12 @@ public class NaverBlogSearchResponse {
                 .map(NaverBlogSearchResponse::convertDocument)
                 .collect(Collectors.toList());
 
-        boolean isEnd = this.start + this.display >= this.total;
+        int naverMaxStart = 1000;
+        boolean isEnd = this.start + this.display > this.total || this.start + this.display >= naverMaxStart + 100;
+        int pageableCount = Math.min(this.total, naverMaxStart);
         KakaoBlogSearchResponse.Meta meta = KakaoBlogSearchResponse.Meta.builder()
                 .totalCount(this.total)
-                .pageableCount(this.total)
+                .pageableCount(pageableCount)
                 .isEnd(isEnd)
                 .build();
 

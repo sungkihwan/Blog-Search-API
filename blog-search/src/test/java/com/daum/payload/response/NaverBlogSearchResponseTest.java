@@ -17,8 +17,8 @@ public class NaverBlogSearchResponseTest {
     public void toKakaoBlogSearchResponseTest() {
         // Given
         NaverBlogSearchResponse naverResponse = new NaverBlogSearchResponse();
-        naverResponse.setTotal(50);
-        naverResponse.setStart(40);
+        naverResponse.setTotal(100);
+        naverResponse.setStart(91);
         naverResponse.setDisplay(10);
 
         List<NaverBlogSearchResponse.NaverBlogSearchItem> items = new ArrayList<>();
@@ -37,7 +37,7 @@ public class NaverBlogSearchResponseTest {
         KakaoBlogSearchResponse kakaoResponse = naverResponse.toKakaoBlogSearchResponse();
 
         // Then
-        assertEquals(50, kakaoResponse.getMeta().getTotalCount());
+        assertEquals(100, kakaoResponse.getMeta().getTotalCount());
         assertEquals(true, kakaoResponse.getMeta().getIsEnd());
         assertEquals(10, kakaoResponse.getDocuments().size());
         for (int i = 0; i < 10; i++) {

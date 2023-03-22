@@ -9,7 +9,6 @@ import com.daum.service.PopularKeywordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -37,7 +36,7 @@ public class BlogSearchController {
             @Valid KakaoBlogSearchRequest request
     ) {
         // popularKeywordService.updateKeyword(request.getQuery()); 동기식
-        // 비동기식 pub - sub -> Message Broker 전환
+        // 비동기식 pub - sub -> Message Broker (Kafka) 전환
         eventPublisher.publishEvent(new BlogSearchKeywordUpdateEvent(this, request.getQuery()));
         return kakaoBlogSearchService.search(request)
                 .block(); // block 제거 -> Mono

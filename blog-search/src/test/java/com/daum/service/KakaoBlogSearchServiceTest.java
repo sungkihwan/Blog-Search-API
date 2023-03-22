@@ -142,7 +142,7 @@ public class KakaoBlogSearchServiceTest {
         KakaoBlogSearchRequest request = KakaoBlogSearchRequest
                 .builder()
                 .query("테스트")
-                .size(100)
+                .size(1000)
                 .page(100)
                 .build();
         // When
