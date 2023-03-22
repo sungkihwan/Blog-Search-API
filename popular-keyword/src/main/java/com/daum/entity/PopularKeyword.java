@@ -10,7 +10,10 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "popular_keyword")
+@Table(
+        name = "popular_keyword",
+        indexes = @Index(name = "idx_popular_keyword_count", columnList = "count")
+)
 public class PopularKeyword {
 
     @Id

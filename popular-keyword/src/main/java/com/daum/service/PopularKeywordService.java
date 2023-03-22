@@ -37,7 +37,7 @@ public class PopularKeywordService {
     // Redis Cache & Batch
     // Window 필요한 경우 or 실시간성 -> Batch & Stream
     @Async
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 5000)
     @Caching(evict = {
             @CacheEvict(value = "top10Keywords", allEntries = true)
     })
